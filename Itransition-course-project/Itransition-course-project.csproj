@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>aspnet-Itransition_course_project-D614EFCA-551F-4CEB-A361-D6D2E1C8BF66</UserSecretsId>
+        <RootNamespace>Itransition_course_project</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Media\mainpagepic.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="wwwroot\Media\mainpagepic.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\Media\mainpagepic_256.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\Media\logo_full.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\Media\logo.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>
