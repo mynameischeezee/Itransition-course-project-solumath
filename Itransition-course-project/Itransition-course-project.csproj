@@ -17,6 +17,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,6 +37,10 @@
       <Content Update="wwwroot\Media\logo.svg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Areas\Identity\Pages\Account\Manage" />
     </ItemGroup>
 
 </Project>
