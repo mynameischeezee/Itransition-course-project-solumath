@@ -3,9 +3,11 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="google-signin-client_id" content="1099033889627-pb7mm3jt4ldrg3073qm6bijf9dnjk0u0.apps.googleusercontent.com">
     <title>@ViewData["Title"] Solumath</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css">
 </head>
 <body>
 <header>
@@ -31,9 +33,8 @@
                     </li>
                 </ul>
                 <form class="form-inline">
-                    <input class="form-control form-control-sm mr-sm-1" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary btn-sm my-2" type="submit">Search</button>
-                    </form>
+                    <input class="form-control rounded-pill" type="search" placeholder="Search" aria-label="Search">
+                </form>
                 <partial name="_LoginPartial"/>
             </div>
         </div>
@@ -48,11 +49,13 @@
 <footer class="footer text-muted">
     <div class="container">
         <p class="text-center">Created with love by cheeze in 2021</p>
- </div>
+    </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+<script src="https://apis.google.com/js/platform.js"></script>
+@await RenderSectionAsync("Scripts", false)
+
 </body>
 </html>
