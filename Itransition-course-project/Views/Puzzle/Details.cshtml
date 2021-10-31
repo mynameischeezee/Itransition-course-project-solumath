@@ -1,7 +1,7 @@
 @using Itransition_course_project.Models.Identity
 @using Microsoft.AspNetCore.Identity
 @model Itransition_course_project.Models.Post
-@inject UserManager<ApplicationUser> UserManager
+@inject UserManager<ApplicationUser> _userManager
 
 @{
     ViewData["Title"] = "Details";
@@ -82,18 +82,19 @@
         </dd>
     </dl>
 </div>
-<div>
-    
-    @{
-        <a class="font-weight-light" asp-action="Index"><i class="bi bi-arrow-return-left"></i> Return to puzzles</a>
-        <br/>
-        if(UserManager.GetUserId(this.User).Equals(Model.CreatedByUserId) || this.User.IsInRole("Admin"))
-        {
-            <a class="font-weight-light" asp-action="Edit" asp-route-id="@Model.Id"><i class="bi bi-pen"></i> Edit</a>
-            <br/>
-            <a class="font-weight-light" asp-action="Delete" asp-route-id="@Model.Id"><i class="bi bi-eraser"></i> Delete</a> 
-        }
-        
-    }
-
+<div class="text-center">
+    <div class="row">
+            <div class="col-sm padding-0">
+                <a class="font-weight-light" asp-action="Index"><i class="bi bi-arrow-return-left"></i> Return to puzzles</a>
+            </div>
+            @if(_userManager.GetUserId(this.User).Equals(Model.CreatedByUserId) || this.User.IsInRole("Admin"))
+            {
+            <div class="col-sm padding-0">
+                <a class="font-weight-light text-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="bi bi-pen"></i> Edit</a>
+            </div>
+            <div class="col-sm padding-0">
+                <a class="font-weight-light text-danger" asp-action="Delete" asp-route-id="@Model.Id"><i class="bi bi-eraser"></i> Delete</a>
+            </div>
+            }
+        </div>
 </div>

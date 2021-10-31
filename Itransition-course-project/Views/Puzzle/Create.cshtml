@@ -5,32 +5,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Post</h4>
-<hr />
+<h1>Create new puzzle</h1>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control rounded-pill" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TopicId" class="control-label"></label>
                 <select asp-for="TopicId" class ="form-control" asp-items="ViewBag.TopicId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatedByUserId" class="control-label"></label>
-                <select asp-for="CreatedByUserId" class ="form-control" asp-items="ViewBag.CreatedByUserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
-            </div>
+            @* <div class="form-group"> *@
+            @*     <label asp-for="CreatedByUserId" class="control-label"></label> *@
+            @*     <select asp-for="CreatedByUserId" class ="form-control" asp-items="ViewBag.CreatedByUserId"></select> *@
+            @* </div> *@
+            @* <div class="form-group"> *@
+            @*     <label asp-for="DateCreated" class="control-label"></label> *@
+            @*     <input asp-for="DateCreated" class="form-control" /> *@
+            @*     <span asp-validation-for="DateCreated" class="text-danger"></span> *@
+            @* </div> *@
             <div class="form-group">
                 <label asp-for="ImageFile1" class="control-label"></label>
                 <input asp-for="ImageFile1" class="form-control"/>

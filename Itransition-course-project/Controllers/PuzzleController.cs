@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Itransition_course_project.Data;
 using Itransition_course_project.Models;
+using Itransition_course_project.Models.Identity;
 using Itransition_course_project.Services.CloudServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace Itransition_course_project.Controllers
 {
@@ -19,11 +21,13 @@ namespace Itransition_course_project.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ICloudStorage _cloudStorage;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PuzzleController(ApplicationDbContext context, ICloudStorage cloudStorage)
+        public PuzzleController(ApplicationDbContext context, ICloudStorage cloudStorage, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _cloudStorage = cloudStorage;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -57,6 +61,41 @@ namespace Itransition_course_project.Controllers
             var fileNameForStorage = $"{title}-{DateTime.Now.ToString("yyyyMMddHHmmss")}{fileExtension}";
             return fileNameForStorage;
         }
+
+        private async Task UpdateFilesEdit(Post post, IFormFile file1, IFormFile file2, IFormFile file3)
+        {
+            if (file1 != null)
+            {
+                if (post.ImageStorageName1 != null)
+                {
+                    await _cloudStorage.DeleteFileAsync(post.ImageStorageName1);
+                }
+                string fileNameForStorage = FormFileName(post.Name, file1.FileName);
+                post.ImageUrl1 = await _cloudStorage.UploadFileAsync(post.ImageFile1, fileNameForStorage);
+                post.ImageStorageName1 = fileNameForStorage;
+            }
+            if (file2 != null)
+            {
+                if (post.ImageStorageName2 != null)
+                {
+                    await _cloudStorage.DeleteFileAsync(post.ImageStorageName2);
+                }
+                string fileNameForStorage = FormFileName(post.Name, file2.FileName);
+                post.ImageUrl2 = await _cloudStorage.UploadFileAsync(post.ImageFile2, fileNameForStorage);
+                post.ImageStorageName2 = fileNameForStorage;
+            }
+            if (file3 != null)
+            {
+                if (post.ImageStorageName3 != null)
+                {
+                    await _cloudStorage.DeleteFileAsync(post.ImageStorageName3);
+                }
+                string fileNameForStorage = FormFileName(post.Name, file3.FileName);
+                post.ImageUrl3 = await _cloudStorage.UploadFileAsync(post.ImageFile3, fileNameForStorage);
+                post.ImageStorageName3 = fileNameForStorage;
+            }
+        }
+
         private async Task UploadFiles(Post post, IFormFile file1, IFormFile file2, IFormFile file3)
         {
             if (file1 != null)
@@ -87,17 +126,19 @@ namespace Itransition_course_project.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,ImageFile1,ImageFile2,ImageFile3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
+        public async Task<IActionResult> Create([Bind("Name,TopicId,ImageUrl1,ImageUrl2,ImageUrl3,ImageFile1,ImageFile2,ImageFile3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
         {
             if (ModelState.IsValid)
             {
                 await UploadFiles(post, post.ImageFile1, post.ImageFile2, post.ImageFile3);
+                post.DateCreated = DateTime.Now;
+                post.CreatedByUserId = _userManager.GetUserId(this.User);
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Id", post.CreatedByUserId);
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", post.TopicId);
+            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Email", post.CreatedByUserId);
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", post.TopicId);
             return View(post);
         }
         public async Task<IActionResult> Edit(int? id)
@@ -112,14 +153,14 @@ namespace Itransition_course_project.Controllers
             {
                 return NotFound();
             }
-            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Id", post.CreatedByUserId);
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", post.TopicId);
+            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Email", post.CreatedByUserId);
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", post.TopicId);
             return View(post);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,ImageFile1,ImageFile2,ImageFile3,ImageStorageName1,ImageStorageName2,ImageStorageName3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
         {
             if (id != post.Id)
             {
@@ -130,6 +171,7 @@ namespace Itransition_course_project.Controllers
             {
                 try
                 {
+                    await UpdateFilesEdit(post, post.ImageFile1, post.ImageFile2, post.ImageFile3);
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
@@ -146,8 +188,8 @@ namespace Itransition_course_project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Id", post.CreatedByUserId);
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", post.TopicId);
+            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Email", post.CreatedByUserId);
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", post.TopicId);
             return View(post);
         }
         
@@ -175,6 +217,18 @@ namespace Itransition_course_project.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _context.Posts.FindAsync(id);
+            if (post.ImageStorageName1 != null)
+            {
+                await _cloudStorage.DeleteFileAsync(post.ImageStorageName1);
+            }
+            if (post.ImageStorageName2 != null)
+            {
+                await _cloudStorage.DeleteFileAsync(post.ImageStorageName2);
+            }
+            if (post.ImageStorageName3 != null)
+            {
+                await _cloudStorage.DeleteFileAsync(post.ImageStorageName3);
+            }
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Itransition_course_project.CustomValidationAttributes;
 using Itransition_course_project.Data;
 using Itransition_course_project.Models.Identity;
 using Microsoft.AspNetCore.Http;
@@ -18,16 +19,22 @@ namespace Itransition_course_project.Models
         public ApplicationUser CreatedByUser { get; set; }
         public string CreatedByUserId { get; set; }
         public DateTime DateCreated { get; set; }
+        [MaxFileSize(1*2048*2048)]
+        [PermittedExtensions(new string[] {".jpg", ".png", ".gif", ".jpeg", ".svg", ".bmp"})]
         [NotMapped]
         public virtual IFormFile ImageFile1 { get; set; }
         [DataType(DataType.ImageUrl)]
         public string ImageUrl1 { get; set; }
         public string ImageStorageName1 { get; set; }
+        [MaxFileSize(1*2048*2048)]
+        [PermittedExtensions(new string[] {".jpg", ".png", ".gif", ".jpeg", ".svg", ".bmp"})]
         [NotMapped]
         public virtual IFormFile ImageFile2 { get; set; }
         [DataType(DataType.ImageUrl)]
         public string ImageUrl2 { get; set; }
         public string ImageStorageName2 { get; set; }
+        [MaxFileSize(1*2048*2048)]
+        [PermittedExtensions(new string[] {".jpg", ".png", ".gif", ".jpeg", ".svg", ".bmp"})]
         [NotMapped]
         public virtual IFormFile ImageFile3 { get; set; }
         [DataType(DataType.ImageUrl)]

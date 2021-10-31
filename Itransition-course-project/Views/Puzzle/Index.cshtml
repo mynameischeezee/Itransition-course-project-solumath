@@ -20,6 +20,7 @@
                     <p class="card-text text-muted font-weight-light media-heading" style="font-size: 80%">@Html.DisplayFor(modelItem => item.Topic.Name)</p>
                     <p class="card-text" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">@Html.DisplayFor(modelItem => item.PostText)</p>
                     <a class="font-weight-light" asp-action="Details" asp-route-id="@item.Id">Solve</a>
+                    <p class="card-text text-muted font-weight-light media-heading" style="font-size: 60%"> Created on @Html.DisplayFor(modelItem => item.DateCreated.Year)/@Html.DisplayFor(modelItem => item.DateCreated.Month)/@Html.DisplayFor(modelItem => item.DateCreated.Day) by @Html.DisplayFor(modelItem => item.CreatedByUser.Email)</p>
                 </div>
             </div>
         </div>
