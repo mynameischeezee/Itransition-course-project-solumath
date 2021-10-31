@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="EntityFramework" Version="6.4.4" />
+        <PackageReference Include="Google.Cloud.Storage.V1" Version="3.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
@@ -46,10 +47,9 @@
         <Content Update="wwwroot\favicon.ico">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services" />
+        <Content Update="aptest-1-23de6f071fbe.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -89,6 +89,10 @@
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_StatusMessage.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\CloudServices\settings" />
     </ItemGroup>
 
 </Project>

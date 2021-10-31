@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,26 +8,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Itransition_course_project.Data;
 using Itransition_course_project.Models;
+using Itransition_course_project.Services.CloudServices;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Itransition_course_project.Controllers
 {
+    [Authorize]
     public class PuzzleController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICloudStorage _cloudStorage;
 
-        public PuzzleController(ApplicationDbContext context)
+        public PuzzleController(ApplicationDbContext context, ICloudStorage cloudStorage)
         {
             _context = context;
+            _cloudStorage = cloudStorage;
         }
 
-        // GET: Puzzle
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Posts.Include(p => p.CreatedByUser).Include(p => p.Topic);
             return View(await applicationDbContext.ToListAsync());
         }
-
-        // GET: Puzzle/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,24 +51,47 @@ namespace Itransition_course_project.Controllers
 
             return View(post);
         }
-
-        // GET: Puzzle/Create
-        public IActionResult Create()
+        private static string FormFileName(string title, string fileName)
         {
-            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id");
-            return View();
+            var fileExtension = Path.GetExtension(fileName);
+            var fileNameForStorage = $"{title}-{DateTime.Now.ToString("yyyyMMddHHmmss")}{fileExtension}";
+            return fileNameForStorage;
+        }
+        private async Task UploadFiles(Post post, IFormFile file1, IFormFile file2, IFormFile file3)
+        {
+            if (file1 != null)
+            {
+                string fileNameForStorage = FormFileName(post.Name, file1.FileName);
+                post.ImageUrl1 = await _cloudStorage.UploadFileAsync(post.ImageFile1, fileNameForStorage);
+                post.ImageStorageName1 = fileNameForStorage;
+            }
+            if (file2 != null)
+            {
+                string fileNameForStorage = FormFileName(post.Name, file2.FileName);
+                post.ImageUrl2 = await _cloudStorage.UploadFileAsync(post.ImageFile2, fileNameForStorage);
+                post.ImageStorageName2 = fileNameForStorage;
+            }
+            if (file3 != null)
+            {
+                string fileNameForStorage = FormFileName(post.Name, file3.FileName);
+                post.ImageUrl3 = await _cloudStorage.UploadFileAsync(post.ImageFile3, fileNameForStorage);
+                post.ImageStorageName3 = fileNameForStorage;
+            }
         }
 
-        // POST: Puzzle/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        public IActionResult Create()
+        {
+            ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Email");
+            ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name");
+            return View();
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
+        public async Task<IActionResult> Create([Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,ImageFile1,ImageFile2,ImageFile3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
         {
             if (ModelState.IsValid)
             {
+                await UploadFiles(post, post.ImageFile1, post.ImageFile2, post.ImageFile3);
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -71,8 +100,6 @@ namespace Itransition_course_project.Controllers
             ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", post.TopicId);
             return View(post);
         }
-
-        // GET: Puzzle/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,10 +116,7 @@ namespace Itransition_course_project.Controllers
             ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", post.TopicId);
             return View(post);
         }
-
-        // POST: Puzzle/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
@@ -126,8 +150,7 @@ namespace Itransition_course_project.Controllers
             ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Id", post.TopicId);
             return View(post);
         }
-
-        // GET: Puzzle/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,8 +169,7 @@ namespace Itransition_course_project.Controllers
 
             return View(post);
         }
-
-        // POST: Puzzle/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

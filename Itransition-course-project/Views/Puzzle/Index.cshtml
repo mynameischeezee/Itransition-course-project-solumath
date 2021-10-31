@@ -5,92 +5,112 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
+<h1>Last posted puzzles</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    or
+    <a class="btn btn-outline-primary rounded-pill" asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Topic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedByUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl3)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostText)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Answer1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Answer2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Answer3)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Topic.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedByUser.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl3)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostText)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Answer1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Answer2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Answer3)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-4">
+            <div class="card rounded m-2 border-0 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title m-0">@Html.DisplayFor(modelItem => item.Name)</h3>
+                    <p class="card-text text-muted font-weight-light media-heading" style="font-size: 80%">@Html.DisplayFor(modelItem => item.Topic.Name)</p>
+                    <p class="card-text" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">@Html.DisplayFor(modelItem => item.PostText)</p>
+                    <a class="font-weight-light" asp-action="Details" asp-route-id="@item.Id">Solve</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+@* <table class="table"> *@
+@*     <thead> *@
+@*         <tr> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Name) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Topic) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.CreatedByUser) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.DateCreated) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.ImageUrl1) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.ImageUrl2) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.ImageUrl3) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.PostText) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Answer1) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Answer2) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Answer3) *@
+@*             </th> *@
+@*             <th></th> *@
+@*         </tr> *@
+@*     </thead> *@
+@*     <tbody> *@
+@* @foreach (var item in Model) { *@
+@*         <tr> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Name) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Topic.Id) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.CreatedByUser.Id) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.DateCreated) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.ImageUrl1) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.ImageUrl2) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.ImageUrl3) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.PostText) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Answer1) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Answer2) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Answer3) *@
+@*             </td> *@
+@*             <td> *@
+@*                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
+@*                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+@*                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> *@
+@*             </td> *@
+@*         </tr> *@
+@* } *@
+@*     </tbody> *@
+@* </table> *@

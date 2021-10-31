@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Itransition_course_project.Data;
 using Itransition_course_project.Models;
 using Itransition_course_project.Models.Identity;
+using Itransition_course_project.Services.CloudServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,9 +25,9 @@ namespace Itransition_course_project
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ICloudStorage, GoogleCloudStorage>();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services
                 .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
