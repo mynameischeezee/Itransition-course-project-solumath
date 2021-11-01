@@ -172,6 +172,23 @@ namespace Itransition_course_project.Controllers
             }
             return Redirect("/Answer/Wrong");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Like(int postId)
+        {
+            _context.RateUserPosts.Add(new RateUserPost()
+                {PostId = postId, Rate = 5, UserId = _userManager.GetUserId(this.User)});
+            await _context.SaveChangesAsync();
+            return Redirect("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Dislike(int postId)
+        {
+            _context.RateUserPosts.Add(new RateUserPost()
+                {PostId = postId, Rate = 1, UserId = _userManager.GetUserId(this.User)});
+            await _context.SaveChangesAsync();
+            return Redirect("Index");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,ImageFile1,ImageFile2,ImageFile3,ImageStorageName1,ImageStorageName2,ImageStorageName3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
@@ -233,6 +250,16 @@ namespace Itransition_course_project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var answers = _context.Answers.ToList().FindAll(x => x.PostId == id);
+            foreach (var a in answers)
+            {
+                _context.Answers.Remove(a);
+            }
+            var rates = _context.RateUserPosts.ToList().FindAll(x => x.PostId == id);
+            foreach (var r in rates)
+            {
+                _context.RateUserPosts.Remove(r);
+            }
             var post = await _context.Posts.FindAsync(id);
             if (post.ImageStorageName1 != null)
             {

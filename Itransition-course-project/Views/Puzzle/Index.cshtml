@@ -1,4 +1,6 @@
+@using Itransition_course_project.Services.Abstract
 @model IEnumerable<Itransition_course_project.Models.Post>
+@inject IRatingService _ratingService
 
 @{
     ViewData["Title"] = "Index";
@@ -17,7 +19,8 @@
             <div class="card rounded m-2 border-0 shadow-sm">
                 <div class="card-body">
                     <h3 class="card-title m-0">@Html.DisplayFor(modelItem => item.Name)</h3>
-                    <p class="card-text text-muted font-weight-light media-heading" style="font-size: 80%">@Html.DisplayFor(modelItem => item.Topic.Name)</p>
+                    <p class="card-text text-muted font-weight-light media-heading m-0" style="font-size: 80%">@Html.DisplayFor(modelItem => item.Topic.Name)</p>
+                    <p class="card-text text-muted font-weight-light media-heading" style="font-size: 80%"><i class="bi bi-star"></i> @_ratingService.GetAverageRating(item.Id)/5</p>
                     <p class="card-text" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">@Html.DisplayFor(modelItem => item.PostText)</p>
                     <a class="font-weight-light" asp-action="Details" asp-route-id="@item.Id">Solve</a>
                     <p class="card-text text-muted font-weight-light media-heading" style="font-size: 60%"> Created on @Html.DisplayFor(modelItem => item.DateCreated.Year)/@Html.DisplayFor(modelItem => item.DateCreated.Month)/@Html.DisplayFor(modelItem => item.DateCreated.Day) by @Html.DisplayFor(modelItem => item.CreatedByUser.Email)</p>

@@ -5,6 +5,7 @@
 @model Itransition_course_project.Models.Post
 @inject UserManager<ApplicationUser> _userManager
 @inject IAnswerService _answerService
+@inject IRatingService _ratingService
 
 
 @{
@@ -18,6 +19,38 @@
     <h5 class="font-weight-light m-0">@Html.DisplayFor(model => model.Topic.Name)</h5>
     <p class="text-muted font-weight-light m-0" style="font-size: 90%">Created by @Html.DisplayFor(model => model.CreatedByUser.Email)</p>
     <p class="text-muted font-weight-light m-0" style="font-size: 90%">@Html.DisplayFor(model => model.DateCreated.Year)/@Html.DisplayFor(model => model.DateCreated.Month)/@Html.DisplayFor(model => model.DateCreated.Day)</p>
+    @{
+        <p class="text-muted font-weight-light m-0" style="font-size: 90%"><i class="bi bi-star"></i> @_ratingService.GetAverageRating(@Model.Id)/5</p>
+        if (_userManager.GetUserId(User) != Model.CreatedByUserId && !_ratingService.CheckIfRateExists(_userManager.GetUserId(this.User), Model.Id))
+        {
+            <div class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-0 m-0">
+                    <form asp-action="Like">
+                        <div class="form-group">
+                            <input name="postId" class="form-control rounded-pill" value="@Model.Id" type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" value="Create" class="btn btn-link text-muted font-weight-light">
+                                <i class="bi bi-hand-thumbs-up"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-0 m-0">
+                    <form asp-action="Dislike">
+                        <div class="form-group">
+                            <input name="postId" class="form-control rounded-pill" value="@Model.Id" type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" value="Create" class="btn btn-link text-muted font-weight-light">
+                                <i class="bi bi-hand-thumbs-down"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    }
     <br/>
     <h3 class="font-weight-light">Here is a puzzle:</h3>
     <div class="clearfix">

@@ -29,6 +29,7 @@ namespace Itransition_course_project
         {
             services.AddSingleton<ICloudStorage, GoogleCloudStorage>();
             services.AddTransient<IAnswerService, AnswerService>();
+            services.AddTransient<IRatingService, RatingService>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
