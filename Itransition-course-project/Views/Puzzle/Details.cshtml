@@ -8,80 +8,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Topic)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Topic.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedByUser.UserName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedByUser.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl1)
-        </dt>
-        <dd class = "col-sm-10">
-            <img src="@Url.Content(Model.ImageUrl1)" alt="Image" class="img-fluid"/>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl2)
-        </dt>
-        <dd class = "col-sm-10">
-            <img src="@Url.Content(Model.ImageUrl2)" alt="Image" class="img-fluid"/>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl3)
-        </dt>
-        <dd class = "col-sm-10">
-            <img src="@Url.Content(Model.ImageUrl3)" alt="Image" class="img-fluid"/>
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PostText)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PostText)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Answer1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Answer1)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Answer2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Answer2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Answer3)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Answer3)
-        </dd>
-    </dl>
+<div class="container-fluid">
+    <br/>
+    <h1 class="m-0">@Html.DisplayFor(model => model.Name)</h1>
+    <h5 class="font-weight-light m-0">@Html.DisplayFor(model => model.Topic.Name)</h5>
+    <p class="text-muted font-weight-light m-0" style="font-size: 90%">Created by @Html.DisplayFor(model => model.CreatedByUser.Email)</p>
+    <p class="text-muted font-weight-light m-0" style="font-size: 90%">@Html.DisplayFor(model => model.DateCreated.Year)/@Html.DisplayFor(model => model.DateCreated.Month)/@Html.DisplayFor(model => model.DateCreated.Day)</p>
+    <br/>
+    <h3 class="font-weight-light">Here is a puzzle:</h3>
+    <div class="clearfix">
+        @{
+                    if (Model.ImageUrl1 != null)
+                    {
+                        <img src="@Url.Content(Model.ImageUrl1)" alt="Image" class="col-md-6 mb-3 ms-md-3 float-sm-right"/>
+                    }
+                }
+        <p>@Html.DisplayFor(model => model.PostText)</p>
+    </div>
+    <div class="row">
+        @{
+            if (Model.ImageUrl2 != null)
+            {
+                <div class="col-sm">
+                    <img src="@Url.Content(Model.ImageUrl2)" alt="Image" class="img-fluid" style="max-height: 200px; height: auto;"/>
+                </div>
+            }
+            if (Model.ImageUrl3 != null)
+            {
+                <div class="col-sm">
+                    <img src="@Url.Content(Model.ImageUrl3)" alt="Image" class="img-fluid" style="max-height: 200px; height: auto;"/>
+                </div>
+            }
+        }
+    </div>
 </div>
+<br/>
 <div class="text-center">
     <div class="row">
             <div class="col-sm padding-0">

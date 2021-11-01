@@ -172,6 +172,10 @@ namespace Itransition_course_project.Controllers
                 try
                 {
                     await UpdateFilesEdit(post, post.ImageFile1, post.ImageFile2, post.ImageFile3);
+                    if(post.CreatedByUserId == null)
+                    {
+                        post.CreatedByUserId = _userManager.GetUserId(this.User);
+                    }
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
