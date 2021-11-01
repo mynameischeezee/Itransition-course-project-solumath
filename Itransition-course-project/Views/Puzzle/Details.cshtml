@@ -1,7 +1,11 @@
 @using Itransition_course_project.Models.Identity
 @using Microsoft.AspNetCore.Identity
+@using Itransition_course_project.Data
+@using Itransition_course_project.Services.Abstract
 @model Itransition_course_project.Models.Post
 @inject UserManager<ApplicationUser> _userManager
+@inject IAnswerService _answerService
+
 
 @{
     ViewData["Title"] = "Details";
@@ -18,11 +22,11 @@
     <h3 class="font-weight-light">Here is a puzzle:</h3>
     <div class="clearfix">
         @{
-                    if (Model.ImageUrl1 != null)
-                    {
-                        <img src="@Url.Content(Model.ImageUrl1)" alt="Image" class="col-md-6 mb-3 ms-md-3 float-sm-right"/>
-                    }
-                }
+            if (Model.ImageUrl1 != null)
+            {
+                <img src="@Url.Content(Model.ImageUrl1)" alt="Image" class="col-md-6 mb-3 ms-md-3 float-sm-right"/>
+            }
+        }
         <p>@Html.DisplayFor(model => model.PostText)</p>
     </div>
     <div class="row">
@@ -41,21 +45,44 @@
             }
         }
     </div>
-</div>
-<br/>
-<div class="text-center">
-    <div class="row">
+    @{
+        if (_userManager.GetUserId(User) != Model.CreatedByUserId && !_answerService.CheckIfAnswerExists(_userManager.GetUserId(this.User), Model.Id))
+        {
+            <h4 class="font-weight-light">Solve this puzzle:</h4>
+            <form asp-action="CreateAnswer">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input name="postId" class="form-control rounded-pill" value="@Model.Id" type="hidden"/>
+                </div>
+                <div class="form-group">
+                    <input name="answer" class="form-control rounded-pill"/>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-outline-primary rounded-pill"/>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p class="text-muted font-italic font-weight-light">You are not alowed to anwer this puzzle.</p>
+        }
+    }
+    <br/>
+    <div class="text-center">
+        <div class="row">
             <div class="col-sm padding-0">
                 <a class="font-weight-light" asp-action="Index"><i class="bi bi-arrow-return-left"></i> Return to puzzles</a>
             </div>
-            @if(_userManager.GetUserId(this.User).Equals(Model.CreatedByUserId) || this.User.IsInRole("Admin"))
+            @if (_userManager.GetUserId(this.User).Equals(Model.CreatedByUserId) || this.User.IsInRole("Admin"))
             {
-            <div class="col-sm padding-0">
-                <a class="font-weight-light text-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="bi bi-pen"></i> Edit</a>
-            </div>
-            <div class="col-sm padding-0">
-                <a class="font-weight-light text-danger" asp-action="Delete" asp-route-id="@Model.Id"><i class="bi bi-eraser"></i> Delete</a>
-            </div>
+                <div class="col-sm padding-0">
+                    <a class="font-weight-light text-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="bi bi-pen"></i> Edit</a>
+                </div>
+                <div class="col-sm padding-0">
+                    <a class="font-weight-light text-danger" asp-action="Delete" asp-route-id="@Model.Id"><i class="bi bi-eraser"></i> Delete</a>
+                </div>
             }
         </div>
+    </div>
 </div>

@@ -92,6 +92,10 @@
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ResetPasswordConfirmation.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_StatusMessage.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Answer\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Answer\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Answer\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Answer\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

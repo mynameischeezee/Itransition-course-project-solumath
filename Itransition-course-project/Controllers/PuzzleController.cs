@@ -95,7 +95,6 @@ namespace Itransition_course_project.Controllers
                 post.ImageStorageName3 = fileNameForStorage;
             }
         }
-
         private async Task UploadFiles(Post post, IFormFile file1, IFormFile file2, IFormFile file3)
         {
             if (file1 != null)
@@ -118,6 +117,10 @@ namespace Itransition_course_project.Controllers
             }
         }
 
+        public bool CheckIfAnswerExists(string userId, int postId)
+        {
+            return _context.Answers.Any(x => x.UserId == userId && x.PostId == postId);
+        }
         public IActionResult Create()
         {
             ViewData["CreatedByUserId"] = new SelectList(_context.Users, "Id", "Email");
@@ -157,7 +160,18 @@ namespace Itransition_course_project.Controllers
             ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", post.TopicId);
             return View(post);
         }
-        
+        [HttpPost]
+        public async Task<IActionResult> CreateAnswer(int postId, string answer)
+        {
+            var post = await _context.Posts.FindAsync(postId);
+            if (answer.Equals(post.Answer1) || answer.Equals(post.Answer2) || answer.Equals(post.Answer3))
+            {
+                _context.Add(new Answer(){PostId = postId, UserId = _userManager.GetUserId(this.User), UserAnswer = answer});
+                await _context.SaveChangesAsync();
+                return Redirect("/Answer/Right");
+            }
+            return Redirect("/Answer/Wrong");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,TopicId,CreatedByUserId,DateCreated,ImageUrl1,ImageUrl2,ImageUrl3,ImageFile1,ImageFile2,ImageFile3,ImageStorageName1,ImageStorageName2,ImageStorageName3,PostText,Answer1,Answer2,Answer3,Id")] Post post)
@@ -196,7 +210,6 @@ namespace Itransition_course_project.Controllers
             ViewData["TopicId"] = new SelectList(_context.Topics, "Id", "Name", post.TopicId);
             return View(post);
         }
-        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

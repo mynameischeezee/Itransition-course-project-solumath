@@ -15,6 +15,7 @@ namespace Itransition_course_project.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
         public DbSet<RateUserPost> RateUserPosts { get; set; }
+        public DbSet<Answer> Answers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
